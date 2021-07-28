@@ -1,12 +1,12 @@
 package application
 
 import (
-	"github.com/golang/glog"
 	"github.com/hamoz/wasil/commons/types"
 	"github.com/hamoz/wasil/domain/entity"
 	"github.com/hamoz/wasil/domain/fsm"
 	"github.com/hamoz/wasil/domain/service"
 	redis "github.com/hamoz/wasil/infrastructure/persistence/redis"
+	log "github.com/sirupsen/logrus"
 )
 
 type PassengerApp struct {
@@ -66,7 +66,7 @@ func (app *PassengerApp) handle(message *types.Message) {
 	ctx.Fsm = requestFsm
 	request, err := app.requestService.FindByChannelUser(message.ChannelType, message.Sender.ID)
 	if err != nil {
-		glog.Errorf("error, cannot find request", err)
+		log.Errorf("error, cannot find request", err)
 		responseMessage.Text = "حدث خطأ أثناء إجراء طلبك الرجاء المعاودة لاحقا أو الاتصال بخدمة العملاء"
 	} else {
 		if request == nil {
@@ -88,7 +88,7 @@ func (app *PassengerApp) handle(message *types.Message) {
 			err = requestFsm.SendEvent(fsm.Start, ctx)
 		}
 		if err != nil {
-			glog.Errorf("error, cannot update request", err)
+			log.Errorf("error, cannot update request", err)
 			responseMessage.Text = "حدث خطأ أثناء إجراء طلبك الرجاء المعاودة لاحقا أو الاتصال بخدمة العملاء"
 		}
 	}
@@ -97,7 +97,7 @@ func (app *PassengerApp) handle(message *types.Message) {
 	//glog.Info("publishing response")
 	err = app.broker.Publish(brokerChannel, responseMessage)
 	if err != nil {
-		glog.Error(err)
+		log.Error(err)
 	}
 
 }

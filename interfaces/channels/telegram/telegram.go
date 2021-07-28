@@ -4,7 +4,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/golang/glog"
 	"github.com/hamoz/wasil/commons/types"
 	"github.com/hamoz/wasil/infrastructure/persistence/redis"
 	log "github.com/sirupsen/logrus"
@@ -97,7 +96,7 @@ func (b *telegramBot) incomingHandler(msgType types.MessageType, m *tb.Message) 
 	//glog.Info("Publising message to App")
 	err := b.broker.Publish(b.settings.InQueue, message)
 	if err != nil {
-		glog.Error(err)
+		log.Error(err)
 	}
 }
 

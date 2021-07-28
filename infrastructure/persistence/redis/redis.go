@@ -2,9 +2,9 @@ package redis
 
 import (
 	"context"
-	"log"
 
 	"github.com/hamoz/wasil/domain/repository"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/go-redis/redis/v8"
 )
